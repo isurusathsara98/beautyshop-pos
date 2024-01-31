@@ -1,0 +1,126 @@
+﻿@page "/pos"
+@inject IJSRuntime JS
+@inject IToastService ToastService
+
+<h2>Womans Beauty Boutique POS</h2>
+
+<div class="search-container">
+    <input type="text" value="@searchItem" @oninput="HandleSearchInput" class="search-input" placeholder="Search...">
+    @if (filteredItems.Count!=0)
+    {
+        <div>
+            <label for="html">@filteredItems[0].Id</label>
+            <label for="html">@filteredItems[0].Brand</label>
+            <label for="html">@filteredItems[0].productName</label>
+            <input type="number" class="search-input" placeholder="Quantity..." @bind="quantity">
+        </div>
+        <button class="add-product-btn" @onclick="AddProductToCheckList">Add Product</button>
+    }
+
+</div>
+
+
+<div class="container-flex">
+    <div class="left-side">
+        @if (productlist == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <!-- Table header -->
+                <thead>
+                    <tr>
+                        <th>ProductID</th>
+                        <th>ProductName</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <!-- Table body -->
+                <tbody>
+                    <!-- Display existing products -->
+                    @foreach (var forecast in checkList)
+                    {
+                        <tr>
+                            <td>@forecast.Id</td>
+                            <td>@forecast.productName</td>
+                            <td>@forecast.sellingPrice</td>
+                            <td>@forecast.BuyingQuantity</td>
+                            <td>@forecast.TotalPrice</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="right-side">
+        <div class="side-panel">
+            <div>
+                <div class="total-text">Total Amount</div>
+                <label for="html">@TotalAmount</label>
+            </div>
+            <button class="checkout-btn" @onclick="PreCheckOut">Checkout</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for adding new product -->
+@if (IsmodalOpen)
+{
+    <div>
+        <div class="modal-overlay">
+            <div class="modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">Checkout the order</h5>
+                    <button type="button" class="close-button" data-dismiss="modal" aria-label="Close" @onclick="CloseAddProductModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form for adding a new product -->
+                    <form>
+                        <div class="form-group">
+                            <label>Total Amount</label>
+                            <input disabled type="text" class="form-control" id="ToatlAmount" @bind="TotalAmount" />
+                        </div>
+                        <div class="form-group">
+                            <label>Paid Amount</label>
+                            <input type="text" class="form-control" id="PaidAmount" @bind="PaidAmount" />
+                        </div>
+                        <div class="form-group">
+                            <label>Discount</label>
+                            <input type="text" class="form-control" id="Discount" @bind="Discount" />
+                        </div>
+                        <div class="form-group">
+                            <label>Return</label>
+                            <input disabled type="text" class="form-control" id="Return" @bind="ReturnedAmount" />
+                        </div>
+
+                        <!-- Add other input fields for NetPrice, SellingPrice, Quantity, etc. -->
+                        <!-- For example:
+                        <div class="form-group">
+                        <label for="netPrice">Net Price:</label>
+                        <input type="text" class="form-control" id="netPrice" />
+                        </div>
+                        -->
+                        <!-- Add more fields as needed -->
+                        <!-- Submit button -->
+                        @if (Ischeckoutavailable)
+                        {
+                            <button type="submit" class="btn btn-primary" @onclick="CheckOut">CheckOut</button>
+                            <button type="submit" class="btn btn-primary" @onclick="CheckOut">CheckOut and Print</button>
+                            <button type="submit" class="btn btn-cancel" @onclick="CancelCheckout">Cancel</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary" @onclick="CalculateReturn">Calculate Return Amount</button>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

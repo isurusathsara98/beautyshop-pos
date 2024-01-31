@@ -27,6 +27,137 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <link href="_content/Blazored.Toast/blazored-toast.min.css" rel="stylesheet" />
 </body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-analytics.js";
+    import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        deleteDoc,
+        updateDoc,
+        doc,
+    } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
+    // TODO: Add SDKs for Firebase products that you want to use
 
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyCrctNc16YG_Xi673I5JxpAmxE6uDQG_-4",
+        authDomain: "womans-beauty-botique.firebaseapp.com",
+        projectId: "womans-beauty-botique",
+        storageBucket: "womans-beauty-botique.appspot.com",
+        messagingSenderId: "765811241192",
+        appId: "1:765811241192:web:6c6fa0caf5932a7de7d95d",
+        measurementId: "G-BXKYBRKLBK"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    // Initialize Cloud Firestore and get a reference to the service
+    const db = getFirestore(app);
+
+    window.authenticateUser = async (username, password) => {
+        const querySnapshot = await getDocs(collection(db, "admin"));
+
+        const authenticated = querySnapshot.docs.some((doc) => {
+            const storedUsername = doc.get("username");
+            const storedPassword = doc.get("password");
+
+            return storedUsername === username && storedPassword === password;
+        });
+
+        return authenticated;
+    };
+
+    window.getInventory = async () => {
+        const querySnapshot = await getDocs(collection(db, "inventory"));
+        let dataArray = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            brand: doc.get("brand"),
+            sellingprice: doc.get("sellingprice"),
+            quantity: doc.get("quantity"),
+            netprice: doc.get("netprice"),
+            productName: doc.get("product"),
+        }));
+
+        return dataArray;
+    };
+
+    window.addInventory = async (product) => {
+        try {
+            const docRef = await addDoc(collection(db, "inventory"), {
+                brand: product.brand,
+                quantity: product.quantity,
+                netprice: product.netPrice,
+                sellingprice: product.sellingPrice,
+                product: product.productName
+            });
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    };
+
+    window.deleteInventory = async (productId) => {
+        try {
+            await deleteDoc(doc(db, "inventory", productId));
+            console.log("Document with ID", productId, "deleted successfully.");
+        } catch (e) {
+            console.error("Error deleting document: ", e);
+        }
+    };
+
+    window.editInventory = async (product) => {
+        try {
+            const docRef = doc(db, "inventory", product.id);
+            await updateDoc(docRef, {
+                brand: product.brand,
+                sellingprice: product.sellingPrice,
+                quantity: product.quantity,
+                netprice: product.netPrice,
+                product: product.productName
+            });
+            console.log("Document with ID", product.id, "updated successfully.");
+        } catch (e) {
+            console.error("Error updating document: ", e);
+        }
+    };
+
+    //--------------Transactions functions--------------------
+    window.getTransaction = async () => {
+        const querySnapshot = await getDocs(collection(db, "transaction"));
+        let dataArray = querySnapshot.docs.map((doc) => {
+            const transactionItem = {
+                Id: doc.id,
+                Status: doc.Status,
+                Discount: doc.discount,
+                TotalAmount: doc.totalAmount,
+                productItems: []
+            };
+
+            const productItemsData = doc.get("productItems");
+            if (productItemsData && typeof productItemsData === 'object') {
+                transactionItem.productItems = Object.keys(productItemsData).map((key) => {
+                    const item = productItemsData[key];
+                    return {
+                        id: key,
+                        productName: item.productName,
+                        quantity: item.quantity,
+                        netprice: item.netPrice,
+                        sellingprice: item.sellingPrice,
+                        brand: item.brand
+                    };
+                });
+            }
+            return transactionItem;
+        });
+        return dataArray;
+    };
+</script>
 </html>
