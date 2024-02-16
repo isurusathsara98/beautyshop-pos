@@ -80,6 +80,7 @@
         const querySnapshot = await getDocs(collection(db, "inventory"));
         let dataArray = querySnapshot.docs.map((doc) => ({
             id: doc.id,
+            productId: doc.get("productId"),
             brand: doc.get("brand"),
             sellingprice: doc.get("sellingprice"),
             quantity: doc.get("quantity"),
@@ -93,6 +94,7 @@
     window.addInventory = async (product) => {
         try {
             const docRef = await addDoc(collection(db, "inventory"), {
+                productId: product.productId,
                 brand: product.brand,
                 quantity: product.quantity,
                 netprice: product.netPrice,
@@ -117,6 +119,7 @@
         try {
             const docRef = doc(db, "inventory", product.id);
             await updateDoc(docRef, {
+                productId: product.productId,
                 brand: product.brand,
                 sellingprice: product.sellingPrice,
                 quantity: product.quantity,

@@ -13,6 +13,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Product Id</th>
             <th>Product Name</th>
             <th>Brand</th>
             <th>Quantity</th>
@@ -28,6 +29,7 @@
         @foreach (var product in string.IsNullOrEmpty(searchItem)?items:filteredItems)
         {
             <tr>
+                <th>@product.productId</th>
                 <td>@product.productName</td>
                 <td>@product.Brand</td>
                 <td>@product.Quantity</td>
@@ -53,6 +55,10 @@
             </div>
             <div class="modal-body">
                 <!-- Add your form fields for adding a product here -->
+                <div class="mb-3">
+                    <label for="productId" class="form-label">Product Id</label>
+                    <input type="text" id="productId" placeholder="Product Id" @bind="newProduct.productId" class="form-control" />
+                </div>
                 <div class="mb-3">
                     <label for="productName" class="form-label">Product Name</label>
                     <input type="text" id="productName" placeholder="Product Name" @bind="newProduct.productName" class="form-control" />

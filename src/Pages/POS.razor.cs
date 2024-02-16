@@ -89,6 +89,7 @@ namespace WomenBeautyBoutique.Pages
             var newProduct = new InventoryItem
             {
                 Id = item.Id,
+                productId = item.productId,
                 productName = item.productName,
                 Brand = item.Brand,
                 Quantity = item.Quantity - item.BuyingQuantity,

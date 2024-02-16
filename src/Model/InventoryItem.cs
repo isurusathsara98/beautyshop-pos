@@ -3,6 +3,7 @@
     public class InventoryItem
     {
         public string Id { get; set; }
+        public string productId { get; set; }
         public string productName {  get; set; }
         public int? Quantity { get; set; } = null;
         public int? BuyingQuantity { get; set; } = null;

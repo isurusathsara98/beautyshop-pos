@@ -9,7 +9,7 @@
     @if (filteredItems.Count!=0)
     {
         <div>
-            <label for="html">@filteredItems[0].Id</label>
+            <label for="html">@filteredItems[0].productId</label>
             <label for="html">@filteredItems[0].Brand</label>
             <label for="html">@filteredItems[0].productName</label>
             <input type="number" class="search-input" placeholder="Quantity..." @bind="quantity">
@@ -45,7 +45,7 @@
                     @foreach (var forecast in checkList)
                     {
                         <tr>
-                            <td>@forecast.Id</td>
+                            <td>@forecast.productId</td>
                             <td>@forecast.productName</td>
                             <td>@forecast.sellingPrice</td>
                             <td>@forecast.BuyingQuantity</td>
