@@ -1,6 +1,15 @@
 ﻿using WomenBeautyBoutique.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Primitives;
+using Microsoft.JSInterop;
+using System;
+using System.Net.Http.Json;
+using System.Net.NetworkInformation;
+using System.Text.Json;
+using System.Transactions;
+
 
 namespace WomenBeautyBoutique.Pages
 {
@@ -25,6 +34,10 @@ namespace WomenBeautyBoutique.Pages
         private int? Discount = 0;
         private int? ReturnedAmount = 0;
 
+        [Inject]
+        private IJSRuntime JSRuntime { get; set; }
+
+        private string BillBody = "Sample bill Body";
         protected override async Task OnInitializedAsync()
         {
             TotalAmount = 0;
@@ -160,11 +173,118 @@ namespace WomenBeautyBoutique.Pages
             filteredItems = items
                 .Where(product => string.IsNullOrEmpty(searchItem) ||
                                    product.productName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                                   product.Brand.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
+                                   product.productId.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
                 .ToList();
             StateHasChanged();
         }
 
+        private async Task Printbill(string billContent)
+        {
+            //List<(string? itemname, string? quantity, decimal? price)> itemsWithPrices = new List<(string? item, string? quantity, decimal? price)>();
+            foreach (var item in checkList)
+            {
+                //itemsWithPrices.Add(item.ProductName, item.Quantity, (decimal.Parse(item.SellingPrice) * decimal.Parse(item.Quantity)));
+            }
+            string billC2ontent = GenerateBillContent();
+            await JSRuntime.InvokeVoidAsync("printBill", billC2ontent);
+        }
+
+        private string GenerateBillContent()
+        {
+            // Create table rows for each item in the checklist
+            string tableRows = string.Join("\n", checkList.Select(itemWithPrice => $@"
+            <tr>
+                <td>{itemWithPrice.productName}</td>
+                <td>{itemWithPrice.Quantity}</td>
+                <td>Rs. {itemWithPrice.sellingPrice}</td>
+            </tr>"));
+
+            // Format your bill content in HTML with a table
+            string billContent = $@"
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>womans</title>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 10px;
+                        font-size: 12px; /* Reduced font size */
+                    }}
+                    .header {{
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }}
+                    .table-container {{
+                        margin-bottom: 20px;
+                    }}
+                    table {{
+                        width: 100%;
+                        border-collapse: collapse;
+                    }}
+                    th, td {{
+                        padding: 8px;
+                        text-align: left;
+                    }}
+                    th {{
+                        background-color: #f2f2f2;
+                    }}
+                    th, td:not(:last-child) {{
+                        border-right: none;
+                    }}
+                    th:first-child, td:first-child {{
+                        border-left: none;
+                    }}
+                    th, td {{
+                        border-top: none;
+                        border-bottom: none;
+                    }}
+                    .total {{
+                        font-weight: bold;
+                    }}
+                    .logo {{
+                        width: 100px;
+                        height: 100px;
+                    }}
+                    .footer {{
+                        text-align: center;
+                        margin-top: 20px;
+                        font-style: italic;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='header'>
+                    <h3>Womans - Beauty Boutique</h3>
+                    <!-- Replace '..\logo.png' with your image path -->
+                    <img class='logo' src='..\logo.png' alt='Shop Logo'>
+                </div>
+                <div class='table-container'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tableRows}
+                        </tbody>
+                    </table>
+                </div>
+                <div class='total'>
+                    <p>Total: Rs. {TotalAmount}</p>
+                    <p>Returned Amount: Rs. {ReturnedAmount}</p>
+                </div>
+                <div class='footer'>
+                    <p>Have a nice day!</p>
+                </div>
+            </body>
+            </html>";
+
+            return billContent;
+        }
 
         //----------------------------------------------------------------------------------------------------------------------------------
 

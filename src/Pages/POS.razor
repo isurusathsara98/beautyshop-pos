@@ -111,7 +111,7 @@
                         @if (Ischeckoutavailable)
                         {
                             <button type="submit" class="btn btn-primary" @onclick="CheckOut">CheckOut</button>
-                            <button type="submit" class="btn btn-primary" @onclick="CheckOut">CheckOut and Print</button>
+                            <button type="submit" class="btn btn-primary" @onclick="(() => Printbill(BillBody))">CheckOut and Print</button>
                             <button type="submit" class="btn btn-cancel" @onclick="CancelCheckout">Cancel</button>
                         }
                         else
