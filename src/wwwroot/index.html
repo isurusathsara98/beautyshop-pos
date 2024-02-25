@@ -140,9 +140,9 @@
         let dataArray = querySnapshot.docs.map((doc) => {
             const transactionItem = {
                 Id: doc.id,
-                Status: doc.Status,
-                Discount: doc.discount,
-                TotalAmount: doc.totalAmount,
+                Status: doc.get("status"),
+                Discount: doc.get("discount"),
+                TotalAmount: doc.get("totalAmount"),
                 productItems: []
             };
 
