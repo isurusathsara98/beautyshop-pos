@@ -27,6 +27,8 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script src="jquery/jquery.min.js"></script>
+    <script src="js/print.js"></script>
     <link href="_content/Blazored.Toast/blazored-toast.min.css" rel="stylesheet" />
 </body>
 <script type="module">
@@ -161,6 +163,15 @@
             return transactionItem;
         });
         return dataArray;
+    };
+
+    window.insertTransaction = async (transactionData) => {
+        try {
+            const docRef = await addDoc(collection(db, "transaction"), transactionData);
+            console.log("Transaction added with ID: ", docRef.id);
+        } catch (error) {
+            console.error("Error adding transaction: ", error);
+        }
     };
 </script>
 </html>

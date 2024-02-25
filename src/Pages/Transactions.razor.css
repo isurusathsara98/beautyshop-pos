@@ -306,10 +306,11 @@ button:not(:disabled), [type="button"]:not(:disabled), [type="reset"]:not(:disab
 .bg-light-blue {
     background-color: #c8d9e9 !important;
 }
+
 .table tbody tr {
     cursor: pointer;
 }
+
 .table tbody tr {
     border-bottom: 2px solid #ddd !important; /* Add a bottom border to separate rows */
 }
-   

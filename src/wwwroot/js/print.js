@@ -1,4 +1,3 @@
-
 function printBill(content) {
     var printWindow = window.open('', '_blank');
     printWindow.document.open();
