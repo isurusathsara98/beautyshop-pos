@@ -143,6 +143,7 @@
                 Status: doc.get("status"),
                 Discount: doc.get("discount"),
                 TotalAmount: doc.get("totalAmount"),
+                CreatedDate = transactionData.ContainsKey("createdDate") ? ConvertFirebaseTimestampToDateTime((Timestamp)transactionData["createdDate"]) : DateTime.MinValue,
                 productItems: []
             };
 

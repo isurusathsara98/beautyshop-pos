@@ -335,6 +335,7 @@ namespace WomenBeautyBoutique.Pages
                 transactionData.Discount = Discount;
                 transactionData.TotalAmount = TotalAmount;
                 transactionData.productItems = checkList;
+                transactionData.CreatedDate = DateTime.Now;
 
                 foreach (var list in transactionData.productItems)
                 {
