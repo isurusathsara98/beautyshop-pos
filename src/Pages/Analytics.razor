@@ -1,0 +1,71 @@
+﻿@page "/analytics"
+@inject IJSRuntime JS
+@inject IToastService ToastService
+
+<h2>Womans Beauty Boutique Analytics</h2>
+
+<div class="d-flex flex-column pt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 ">
+        <div class="d-flex align-items-center m-1">
+            <button class="btn btn-success btn-lg p-3" @onclick="SetLastDay">Last Day</button>
+            <button class="btn btn-success btn-lg p-3" @onclick="SetLastWeek">Last Week</button>
+            <button class="btn btn-success btn-lg p-3" @onclick="SetLastMonth">Last Month</button>
+        </div>
+    </div>
+    <div class="d-flex align-items-center mb-3">
+        <div class="mr-3">
+            <input type="datetime-local" class="datetime-picker" @bind="SelectedDateTimeFrom" />
+        </div>
+        <div>
+            <input type="datetime-local" class="datetime-picker" @bind="SelectedDateTimeTo" />
+        </div>
+    </div>
+</div>
+
+
+
+<div class="pe-lg-5">
+<section class="pricing-table">
+    <div class="card">
+            <h6 class="type">Today</h6>
+            <div class="price"><span>Rs.</span>20</div>
+        <h5 class="plan">Plan</h5>
+        <ul class="details">
+            <li>FREE Stickers</li>
+            <li>FREE Delivery</li>
+            <li>24/7 support</li>
+        </ul>
+        <div class="buy-button">
+                <button disable class="btn btn-primary">Today</button>
+        </div>
+    </div>
+
+    <div class="card">
+            <h6 class="type">Last Week</h6>
+        <div class="price"><span>Rs.</span>50</div>
+        <h5 class="plan">Plan</h5>
+        <ul class="details">
+            <li>FREE Stickers</li>
+            <li>FREE Delivery</li>
+            <li>24/7 support</li>
+        </ul>
+        <div class="buy-button">
+                <button disable class="btn btn-primary">Last Week</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h6 class="type">Last Month</h6>
+            <div class="price"><span>Rs.</span>100</div>
+        <h5 class="plan">Plan</h5>
+        <ul class="details">
+            <li>FREE Stickers</li>
+            <li>FREE Delivery</li>
+            <li>24/7 support</li>
+        </ul>
+        <div class="buy-button">
+                <button disable class="btn btn-primary">Last Month</button>
+        </div>
+    </div>
+    </section>
+</div>
