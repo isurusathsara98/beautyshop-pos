@@ -153,7 +153,7 @@ namespace WomenBeautyBoutique.Pages
             filteredItems = items
                 .Where(product => string.IsNullOrEmpty(searchItem) ||
                                    product.productName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                                   product.Brand.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
+                                   product.productId.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
                 .ToList();
             StateHasChanged();
         }
