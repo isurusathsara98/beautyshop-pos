@@ -13,11 +13,11 @@ namespace WomenBeautyBoutique.Pages
         private int selectedButtonIndex = -1;
         protected override async Task OnInitializedAsync()
         {
-            transactionItems = await JS.InvokeAsync<List<TransactionItem>>("getTransaction");
-            foreach (var transactionItem in transactionItems)
-            {
+            //transactionItems = await JS.InvokeAsync<List<TransactionItem>>("getTransaction");
+            //foreach (var transactionItem in transactionItems)
+            //{
 
-            }
+            //}
         }
         private string HighlightButton(int buttonIndex)
         {
